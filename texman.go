@@ -1,5 +1,6 @@
 // Package texman provides a few simple functions to make characters and line
-// changes to a text file.
+// changes to a text file. The row and column inputs should be 1 or greater.
+// A row of 1 and a column of 1 is the first available location.
 package texman
 
 import (
@@ -27,7 +28,7 @@ func NewFile(filename string) *TM {
 	}
 }
 
-// Load will read a file into memory
+// Load reads a file into memory.
 func (s *TM) Load() error {
 	s.content = make([][]rune, 0)
 
@@ -54,7 +55,7 @@ func (s *TM) Load() error {
 	return nil
 }
 
-// String will return a string representation of the text.
+// String returns a string representation of the text.
 func (s *TM) String() string {
 	out := ""
 	for r := 0; r < len(s.content); r++ {
@@ -70,7 +71,7 @@ func (s *TM) String() string {
 	return out
 }
 
-// Byte will return a byte array representation of the text.
+// Byte returns a byte array representation of the text.
 func (s *TM) Byte() []byte {
 	return []byte(s.String())
 }
@@ -85,14 +86,14 @@ func validate(row int, col int) error {
 	return nil
 }
 
-// Overwrite will overwrite content at a specific location.
+// Overwrite replaces content at a specific location.
 func (s *TM) Overwrite(row int, col int, content string) error {
 	err := validate(row, col)
 	if err != nil {
 		return err
 	}
 
-	// Fix the offset since computers start at 0.
+	// Fix the offset since arrays start at 0.
 	row--
 	col--
 
@@ -116,14 +117,14 @@ func (s *TM) Overwrite(row int, col int, content string) error {
 	return nil
 }
 
-// Insert will insert content at a specific location.
+// Insert adds content at a specific location.
 func (s *TM) Insert(row int, col int, content string) error {
 	err := validate(row, col)
 	if err != nil {
 		return err
 	}
 
-	// Fix the offset since computers start at 0.
+	// Fix the offset since arrays start at 0.
 	row--
 	col--
 
@@ -158,19 +159,19 @@ func (s *TM) Insert(row int, col int, content string) error {
 	return nil
 }
 
-// InsertLine will insert a new line.
+// InsertLine inserts a new line at a specific location.
 func (s *TM) InsertLine(row int, col int) error {
 	return s.Insert(row, col, s.LineEnding)
 }
 
-// Delete a character at the specified location.
+// Delete removes a character at a specified location.
 func (s *TM) Delete(row int, col int) error {
 	err := validate(row, col)
 	if err != nil {
 		return err
 	}
 
-	// Fix the offset since computers start at 0.
+	// Fix the offset since arrays start at 0.
 	row--
 	col--
 
@@ -191,14 +192,14 @@ func (s *TM) Delete(row int, col int) error {
 	return nil
 }
 
-// DeleteLine will delete a line.
+// DeleteLine deletes a line at a specific location.
 func (s *TM) DeleteLine(row int) error {
 	err := validate(row, 1)
 	if err != nil {
 		return err
 	}
 
-	// Fix the offset since computers start at 0.
+	// Fix the offset since arrays start at 0.
 	row--
 
 	if row >= len(s.content) {
