@@ -9,8 +9,8 @@ import (
 	"os"
 )
 
-// Simply represents a simple lanaguage to modify text files.
-type Simply struct {
+// TM represents a text file.
+type TM struct {
 	filename string
 	content  [][]rune
 
@@ -19,8 +19,8 @@ type Simply struct {
 }
 
 // NewFile returns an object of a file.
-func NewFile(filename string) *Simply {
-	return &Simply{
+func NewFile(filename string) *TM {
+	return &TM{
 		filename:   filename,
 		content:    make([][]rune, 0),
 		LineEnding: "\n",
@@ -28,7 +28,7 @@ func NewFile(filename string) *Simply {
 }
 
 // Load will read a file into memory
-func (s *Simply) Load() error {
+func (s *TM) Load() error {
 	s.content = make([][]rune, 0)
 
 	f, err := os.Open(s.filename)
@@ -55,7 +55,7 @@ func (s *Simply) Load() error {
 }
 
 // String will return a string representation of the text.
-func (s *Simply) String() string {
+func (s *TM) String() string {
 	out := ""
 	for r := 0; r < len(s.content); r++ {
 		row := s.content[r]
@@ -71,7 +71,7 @@ func (s *Simply) String() string {
 }
 
 // Byte will return a byte array representation of the text.
-func (s *Simply) Byte() []byte {
+func (s *TM) Byte() []byte {
 	return []byte(s.String())
 }
 
@@ -86,7 +86,7 @@ func validate(row int, col int) error {
 }
 
 // Overwrite will overwrite content at a specific location.
-func (s *Simply) Overwrite(row int, col int, content string) error {
+func (s *TM) Overwrite(row int, col int, content string) error {
 	err := validate(row, col)
 	if err != nil {
 		return err
@@ -117,7 +117,7 @@ func (s *Simply) Overwrite(row int, col int, content string) error {
 }
 
 // Insert will insert content at a specific location.
-func (s *Simply) Insert(row int, col int, content string) error {
+func (s *TM) Insert(row int, col int, content string) error {
 	err := validate(row, col)
 	if err != nil {
 		return err
@@ -159,12 +159,12 @@ func (s *Simply) Insert(row int, col int, content string) error {
 }
 
 // InsertLine will insert a new line.
-func (s *Simply) InsertLine(row int, col int) error {
+func (s *TM) InsertLine(row int, col int) error {
 	return s.Insert(row, col, s.LineEnding)
 }
 
 // Delete a character at the specified location.
-func (s *Simply) Delete(row int, col int) error {
+func (s *TM) Delete(row int, col int) error {
 	err := validate(row, col)
 	if err != nil {
 		return err
@@ -192,7 +192,7 @@ func (s *Simply) Delete(row int, col int) error {
 }
 
 // DeleteLine will delete a line.
-func (s *Simply) DeleteLine(row int) error {
+func (s *TM) DeleteLine(row int) error {
 	err := validate(row, 1)
 	if err != nil {
 		return err
